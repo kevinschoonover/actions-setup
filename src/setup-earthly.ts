@@ -53,7 +53,7 @@ async function run() {
     );
     core.info(`Matched version: ${version.tag_name}`);
 
-    core.addPath(installationPath);
+    core.addPath(installationDir);
     const restored = await restoreCache(
       installationPath,
       semver.clean(version.tag_name) || version.tag_name.substring(1)
