@@ -14,19 +14,32 @@ process.on("uncaughtException", (e) => {
   core.info(`${warningPrefix}${e.message}`);
 });
 
-export const cacheBinary = async (path: string) => {
+export async function run() {
+  try {
+    await cacheBinary();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      core.setFailed(error.message);
+    } else {
+      core.setFailed(`unknown error: ${error}`);
+    }
+  }
+}
+
+export const cacheBinary = async () => {
   if (!utils.isCacheFeatureAvailable()) {
     return;
   }
 
   const state = core.getState(State.CacheMatchedKey);
   const primaryKey = core.getState(State.CachePrimaryKey);
+  const path = core.getState(State.BinaryPath);
   if (!fs.existsSync(path)) {
     throw new Error(`Cache folder path doesn't exist on disk: ${path}`);
   }
 
   core.debug(
-    `checking if cache hit occurred. primaryKey: ${primaryKey}, state ${state}`
+    `checking if cache hit occurred. primaryKey: ${primaryKey}, state: ${state}`
   );
   if (primaryKey === state) {
     core.info(
@@ -53,3 +66,5 @@ export const cacheBinary = async (path: string) => {
     }
   }
 };
+
+run();

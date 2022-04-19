@@ -19,6 +19,7 @@ export const restoreCache = async (
   core.debug(`primary key is ${primaryKey}`);
 
   core.saveState(State.CachePrimaryKey, primaryKey);
+  core.saveState(State.BinaryPath, path);
 
   const cacheKey = await cache.restoreCache([path], primaryKey);
   core.setOutput("cache-hit", Boolean(cacheKey));

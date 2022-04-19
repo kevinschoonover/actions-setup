@@ -8,7 +8,6 @@ import * as core from "@actions/core";
 import * as tc from "@actions/tool-cache";
 
 import { getVersionObject } from "./lib/get-version";
-import { cacheBinary } from "./cache-save";
 import { restoreCache } from "./cache-restore";
 
 const IS_WINDOWS = process.platform === "win32";
@@ -86,8 +85,6 @@ async function run() {
     );
     core.addPath(cachedPath);
     core.exportVariable("FORCE_COLOR", "1");
-
-    cacheBinary(installationPath);
   } catch (error: unknown) {
     if (error instanceof Error) {
       core.setFailed(error.message);
