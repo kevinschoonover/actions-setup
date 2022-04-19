@@ -58,6 +58,7 @@ async function run() {
       semver.clean(version.tag_name) || version.tag_name.substring(1)
     );
     if (restored) {
+      await fs.promises.chmod(installationPath, 0o755);
       return;
     }
 
