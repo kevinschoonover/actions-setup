@@ -21,11 +21,13 @@ export const cacheBinary = async (path: string) => {
 
   const state = core.getState(State.CacheMatchedKey);
   const primaryKey = core.getState(State.CachePrimaryKey);
-
   if (!fs.existsSync(path)) {
     throw new Error(`Cache folder path doesn't exist on disk: ${path}`);
   }
 
+  core.debug(
+    `checking if cache hit occurred. primaryKey: ${primaryKey}, state ${state}`
+  );
   if (primaryKey === state) {
     core.info(
       `Cache hit occurred on the primary key ${primaryKey}, not saving cache.`
