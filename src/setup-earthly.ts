@@ -53,6 +53,7 @@ async function run() {
     );
     core.info(`Matched version: ${version.tag_name}`);
 
+    core.addPath(installationPath);
     const restored = await restoreCache(
       installationPath,
       semver.clean(version.tag_name) || version.tag_name.substring(1)
@@ -79,12 +80,11 @@ async function run() {
 
     await fs.promises.chmod(installationPath, 0o755);
 
-    const cachedPath = await tc.cacheDir(
+    await tc.cacheDir(
       path.join(destination, "bin"),
       pkgName,
       semver.clean(version.tag_name) || version.tag_name.substring(1)
     );
-    core.addPath(cachedPath);
     core.exportVariable("FORCE_COLOR", "1");
   } catch (error: unknown) {
     if (error instanceof Error) {
